@@ -7,6 +7,8 @@ categories: machine-learning
 
 Dạo gần đây, AI đang "hot" hòn họt từ khi ChatGPT xuất hiện năm 2022. Ai cũng kinh ngạc khi nó làm được đủ thứ từ giải đáp thắc mắc đơn giản đến viết luận văn, code phức tạp (lập trình viên có vẻ hơi "toang" 😂). AI mạnh mẽ vậy, nhưng thực ra nó học hỏi giống con người mình thôi, đó chính là Học Máy.
 
+Note: Bài blog này sẽ hơi nặng về lý thuyết Toán một xíu 😅
+
 ![Minh họa Machine Learning](/assets/images/machine_learning.jpg)
 
 
@@ -31,8 +33,8 @@ bài thi cho tốt thì bạn phải dành nhiều thời gian để học tập
 **kinh nghiệm** bạn tích lũy được càng nhiều và trở nên nhạy bén hơn. Trong học máy, E được biểu diễn dưới dạng dữ liệu. Càng 
 nhiều dữ liệu thì chương trình học máy lại càng cho ra kết quả chính xác.
 
-- **Hiệu suất (P) - Điểm số bài kiểm tra**: Điểm số là thước đo đánh giá bạn thực hiện *tác vụ* (bài kiểm tra Tích phân) sau 
-khi đã tích lũy *kinh nghiệm* (lý thuyết và luyện đề)
+- **Hiệu suất (P) - Điểm số bài kiểm tra**: Điểm số là thước đo đánh giá bạn thực hiện *tác vụ* (bài kiểm tra Tích phân) sau khi đã tích lũy *kinh nghiệm* (lý thuyết và luyện đề). Tương tự, hiệu suất đánh giá khả năng của mô hình học máy có 
+khả năng thực hiện tác vụ T tốt hay không.
 
 Trong các bài viết của mình, tôi sẽ tiếp cận Học Máy chủ yếu dưới góc độ xác suất tức là mọi biến ẩn (kết quả dự đoán hay các 
 tham số bên trong mô hình) đều được xét như một biến ngẫu nhiên theo một phân phối xác suất nhất định. Lối tiếp cận này mang lại 
@@ -53,6 +55,8 @@ Dựa vào các kiểu dữ liệu thì mô hình học máy được chia ra th
 
 4. [**Học tăng cường (Reinforcement Learning)**](#4-học-tăng-cường-reinforcement-learning)
 
+Ở bài lần này mình sẽ bàn luận sau về mục 1 (Học có giám sát). Còn những phần còn 
+lại thì xin để dành cho các bài blog sau.
 
 ### 1. Học có giám sát (Supervised Learning)
 Trong bài toán này, tác vụ T là học một hàm số ánh xạ $f$ từ biến đầu vào $\boldsymbol{x} \in \mathcal X$ ra kết quả
@@ -101,15 +105,40 @@ $$
 $$
 Huấn luyện mô hình được hiểu theo cách khác là quá trình tìm tham số của ánh xạ $f$ để tối thiểu hóa rủi ro thực nghiệm
 
-
 Sẽ có bài viết chi tiết hơn về  hàm mất mát và lý thuyết quyết định (Decision Theory)
 
 - **Bài toán hồi quy (Regression)**:
 
-Thay vì nhãn của mình dưới dạng class thì giá trị bây giờ là một số thực $y \in R$. Xét về bài toán dự đoán hoa Iris thì
-$y$ có thể được chiều cao trung bình của cây hoặc là độ độc của hoa nếu vô tình ăn vào. B 
+Thay vì nhãn của mình dưới dạng class thì giá trị bây giờ là một số thực $y \in \mathbb{R}$. Xét về bài toán dự đoán hoa Iris
+ thì $y$ có thể được chiều cao trung bình của cây hoặc là độ độc của hoa nếu vô tình ăn vào. Mô hình hồi quy khá giống so với
+ mô hình phân loại chỉ khác biệt là ở hàm mất mát. Ở đây ta sẽ dùng
+**hàm mất mát bậc hai** (quadratic loss) 
 
+$$
+\tag{5} \ell_{2}(y, \hat{y}) = (y - \hat{y})^{2}
+$$
 
-### 2. Học không có giám sát (Unsupervised Learning)
+Hàm mất mát này phạt nếu **residual** (tức là phần dư) của $y - \hat{y}$ lớn. Hàm 
+rủi ro thực nghiệm nếu xài hàm mất mát $l_2$ thì sẽ bằng sai số bình phương trung
+bình (mean squared error) với công thức:
+
+$$
+\tag{6} \text{MSE}(\theta) = \frac{1}{N} \sum_{n=1}^{N} (y_n - f(x_n; \theta))^2
+$$
+
+- **Sự Bất định (Uncertainty)**
+
+Thật sự là vô lý khi ta dám khẳng định kết quả dự đoán của mô hình luôn luôn chính 
+xác cho từng input đầu vào. Khác với những hàm số  Toán học hay Vật lý, những mô
+hình máy học không có những mối quan hệ cụ thể giữa ánh xạ đầu vào và đầu ra. Điều 
+này dẫn đến kết quả dự đoán luôn tòn tại dưới dạng một xác suất.
+
+Trong bài toán phân loại (Classification) thì xác suất này được mô tả dưới dạng **phân phối của xác suất có điều kiện** như sau:
+
+$$
+\tag{7}  p(y = c|\boldsymbol{x}; \boldsymbol{\theta})
+$$
+
+<!-- ### 2. Học không có giám sát (Unsupervised Learning)
 ### 3. Tự học giám sát (Self-supervised Learning)
-### 4. Học tăng cường (Reinforcement Learning)
+### 4. Học tăng cường (Reinforcement Learning) -->
